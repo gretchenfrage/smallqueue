@@ -2,6 +2,11 @@
 name = "smallqueue"
 version = "0.1.0"
 authors = ["Phoenix <kahlo.phoenix@gmail.com>"]
+description = "A queue with a no-alloc optimization when the size is 1 or 0."
+readme = "README.md"
+repository = "https://github.com/gretchenfrage/smallqueue"
+categories = ["data-structures"]
+license = "MIT"
 
 [dependencies]
-through = { path = "../through" }
+through = "0.1.0"

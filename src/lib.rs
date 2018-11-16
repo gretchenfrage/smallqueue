@@ -14,20 +14,23 @@ pub struct SmallQueue<T> {
     state: SmallQueueState<T>
 }
 impl<T> SmallQueue<T> {
+    /// New, empty queue.
     pub fn new() -> Self {
         SmallQueue {
             state: SmallQueueState::Zero
         }
     }
 
+    /// New queue with a single element.
     pub fn of(elem: T) -> Self {
         SmallQueue {
             state: SmallQueueState::One(elem)
         }
     }
 
+    /// Insert an element in insertion end.
     pub fn add(&mut self, elem: T) {
-        replace(&mut self.state, move |state| match state {
+        through(&mut self.state, move |state| match state {
             SmallQueueState::Zero => SmallQueueState::One(elem),
             SmallQueueState::One(present) => {
                 let mut queue = VecDeque::new();
@@ -42,8 +45,9 @@ impl<T> SmallQueue<T> {
         })
     }
 
+    /// Remove an element from the removal end.
     pub fn remove(&mut self) -> Option<T> {
-        replace_and_get(&mut self.state, |state| match state {
+        through_and(&mut self.state, |state| match state {
             SmallQueueState::Zero => (SmallQueueState::Zero, None),
             SmallQueueState::One(elem) => (SmallQueueState::Zero, Some(elem)),
             SmallQueueState::Several(mut queue) => {
@@ -57,6 +61,7 @@ impl<T> SmallQueue<T> {
         })
     }
 
+    /// Whether the queue is empty.
     pub fn is_empty(&self) -> bool {
         match &self.state {
             &SmallQueueState::Zero => true,
